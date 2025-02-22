@@ -6,7 +6,7 @@ const subnets = Astro.url.searchParams.get('subnets');
 const show = bytes && subnets ? true : false;
 ---
 
-<Layout title="IPSubnetCalculator">
+<Layout>
     <form class="flex flex-col items-center">
         <span>Provide IP Address:</span>
         <div class="flex gap-x-1">
