@@ -1,4 +1,5 @@
 ---
+import count from '../utils/count';
 import Error from './Error.astro';
 interface Props {
     ip: string;
@@ -46,6 +47,8 @@ binarySubnetMask = binarySubnetMaskArray.join('');
 const newSubnetMask = Array.from({ length: 4 }, (_, i) =>
     parseInt(binarySubnetMask.slice(i * 8, (i + 1) * 8), 2),
 ).join('.');
+const hosts = Math.pow(2, 32 - count(binarySubnetMask.split(''), '1'));
+const validHosts = hosts > 2 ? hosts - 2 : hosts;
 ---
 
 <span class="font-bold">General information:</span>
@@ -61,4 +64,18 @@ const newSubnetMask = Array.from({ length: 4 }, (_, i) =>
         </div>
     )
 }
-{!error && <span>New subnet mask: {newSubnetMask}</span>}
+{
+    !error && (
+        <>
+            <span>New subnet mask: {newSubnetMask}</span>
+            <div class="flex gap-x-1">
+                <span>Number of hosts for each subnet: {validHosts}</span>
+                {validHosts <= 2 && (
+                    <span class="font-bold">
+                        (Special cases when normal rule doesn't apply!)
+                    </span>
+                )}
+            </div>
+        </>
+    )
+}
