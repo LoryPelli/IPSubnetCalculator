@@ -11,24 +11,20 @@ const show = bytes && subnets ? true : false;
         <span>Provide IP Address:</span>
         <div class="flex gap-x-1">
             {
-                Array(4)
-                    .fill(0)
-                    .map((_, i) => {
-                        return (
-                            <>
-                                <input
-                                    type="number"
-                                    name="byte"
-                                    value={bytes[i]}
-                                    min="0"
-                                    max="255"
-                                    required
-                                    class="w-16 rounded-md border-2 p-1.5 text-center"
-                                />
-                                {i != 3 && <span class="text-4xl">.</span>}
-                            </>
-                        );
-                    })
+                Array.from({ length: 4 }, (_, i) => (
+                    <>
+                        <input
+                            type="number"
+                            name="byte"
+                            value={bytes[i]}
+                            min="0"
+                            max="255"
+                            required
+                            class="w-16 rounded-md border-2 p-1.5 text-center"
+                        />
+                        {i != 3 && <span class="text-4xl">.</span>}
+                    </>
+                ))
             }
         </div>
         <span>How many subnets do you want to make?</span>
@@ -45,5 +41,5 @@ const show = bytes && subnets ? true : false;
             >
         </div>
     </form>
-    <Result show={show} ip={bytes.join('.')} subnets={subnets} />
+    {show && <Result ip={bytes.join('.')} subnets={subnets} />}
 </Layout>
