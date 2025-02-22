@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import Result from '../components/Result.svelte';
 const bytes = Astro.url.searchParams.getAll('byte');
 const subnets = Astro.url.searchParams.get('subnets');
+const show = bytes && subnets ? true : false;
 ---
 
 <Layout title="IPSubnetCalculator">
@@ -44,5 +45,5 @@ const subnets = Astro.url.searchParams.get('subnets');
             >
         </div>
     </form>
-    <Result />
+    <Result show={show} ip={bytes.join('.')} subnets={subnets} />
 </Layout>
