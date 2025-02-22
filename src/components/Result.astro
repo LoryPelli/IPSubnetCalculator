@@ -1,4 +1,5 @@
 ---
+import Error from './Error.astro';
 interface Props {
     ip: string;
     subnets: number;
@@ -7,17 +8,27 @@ const { ip, subnets } = Astro.props;
 const first = parseInt(ip).toString(2).split('');
 let ipClass: 'A' | 'B' | 'C';
 let defaultSubnetMask: '255.0.0.0' | '255.255.0.0' | '255.255.255.0';
+let maxSubnets: number;
+let error = false;
+let errorMessage = '';
 if (parseInt(first[0]) == 0) {
     ipClass = 'A';
     defaultSubnetMask = '255.0.0.0';
+    maxSubnets = Math.pow(2, 24);
 } else {
     if (parseInt(first[1]) == 0) {
         ipClass = 'B';
         defaultSubnetMask = '255.255.0.0';
+        maxSubnets = Math.pow(2, 16);
     } else {
         ipClass = 'C';
         defaultSubnetMask = '255.255.255.0';
+        maxSubnets = Math.pow(2, 8);
     }
+}
+if (subnets > maxSubnets) {
+    error = true;
+    errorMessage = `Max number of subnets for a class ${ipClass} address is ${maxSubnets}!`;
 }
 let binarySubnetMask = defaultSubnetMask
     .split('.')
@@ -43,4 +54,11 @@ const newSubnetMask = Array.from({ length: 4 }, (_, i) =>
 <span>Class: {ipClass}</span>
 <span class="font-bold">Detailed information:</span>
 <span>Default subnet mask: {defaultSubnetMask}</span>
-<span>New subnet mask: {newSubnetMask}</span>
+{
+    error && (
+        <div class="pt-4">
+            <Error message={errorMessage} />
+        </div>
+    )
+}
+{!error && <span>New subnet mask: {newSubnetMask}</span>}
