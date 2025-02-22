@@ -1,0 +1,48 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Result from '../components/Result.svelte';
+const bytes = Astro.url.searchParams.getAll('byte');
+const subnets = Astro.url.searchParams.get('subnets');
+---
+
+<Layout title="IPSubnetCalculator">
+    <form class="flex flex-col items-center">
+        <span>Provide IP Address:</span>
+        <div class="flex gap-x-1">
+            {
+                Array(4)
+                    .fill(0)
+                    .map((_, i) => {
+                        return (
+                            <>
+                                <input
+                                    type="number"
+                                    name="byte"
+                                    value={bytes[i]}
+                                    min="0"
+                                    max="255"
+                                    required
+                                    class="w-16 rounded-md border-2 p-1.5 text-center"
+                                />
+                                {i != 3 && <span class="text-4xl">.</span>}
+                            </>
+                        );
+                    })
+            }
+        </div>
+        <span>How many subnets do you want to make?</span>
+        <input
+            type="number"
+            name="subnets"
+            value={subnets}
+            required
+            class="w-60 rounded-md border-2 p-1.5 text-center"
+        />
+        <div class="pt-1.5">
+            <button type="submit" class="cursor-pointer rounded-md border-2"
+                >Calculate</button
+            >
+        </div>
+    </form>
+    <Result client:only />
+</Layout>
