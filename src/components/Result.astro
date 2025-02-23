@@ -76,6 +76,20 @@ const validHosts = hosts > 2 ? hosts - 2 : hosts;
                     </span>
                 )}
             </div>
+            <div class="py-4">
+                <table>
+                    <thead class="border-2">
+                        <th>Subnets:</th>
+                    </thead>
+                    <tbody class="border-2 text-center">
+                        {Array.from({ length: subnets }, (_, i) => (
+                            <tr>
+                                <td>Subnet {i}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
         </>
     )
 }
