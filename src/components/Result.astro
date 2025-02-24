@@ -7,7 +7,7 @@ interface Props {
     subnets: number;
 }
 const { ip, subnets } = Astro.props;
-const first = parseInt(ip).toString(2).split('');
+const first = parseInt(ip).toString(2).padStart(8, '0').split('');
 const totalBits = 32;
 let ipClass: 'A' | 'B' | 'C';
 let defaultSubnetMask: '255.0.0.0' | '255.255.0.0' | '255.255.255.0';
