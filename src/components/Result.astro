@@ -14,23 +14,19 @@ let defaultSubnetMask: '255.0.0.0' | '255.255.0.0' | '255.255.255.0';
 let maxSubnets: number;
 let error = false;
 let errorMessage = '';
-let networkBits: number;
 if (parseInt(first[0]) == 0) {
     ipClass = 'A';
     defaultSubnetMask = '255.0.0.0';
-    networkBits = 24;
-    maxSubnets = Math.pow(2, networkBits);
+    maxSubnets = Math.pow(2, 8);
 } else {
     if (parseInt(first[1]) == 0) {
         ipClass = 'B';
         defaultSubnetMask = '255.255.0.0';
-        networkBits = 16;
-        maxSubnets = Math.pow(2, networkBits);
+        maxSubnets = Math.pow(2, 16);
     } else {
         ipClass = 'C';
         defaultSubnetMask = '255.255.255.0';
-        networkBits = 8;
-        maxSubnets = Math.pow(2, networkBits);
+        maxSubnets = Math.pow(2, 24);
     }
 }
 const byteArray = z.array(z.coerce.number().min(0).max(255)).length(4);
@@ -48,14 +44,13 @@ let binarySubnetMask = defaultSubnetMask
     .join('');
 let binarySubnetMaskArray = binarySubnetMask.split('');
 let bits = Math.ceil(Math.log2(subnets));
-networkBits += bits;
-const hostBits = totalBits - networkBits;
 for (let i = 0; i < binarySubnetMaskArray.length && bits > 0; i++) {
     if (binarySubnetMaskArray[i] == '0') {
         binarySubnetMaskArray[i] = '1';
         bits--;
     }
 }
+const networkBits = count(binarySubnetMaskArray, '1');
 binarySubnetMask = binarySubnetMaskArray.join('');
 const newSubnetMask = Array.from({ length: 4 }, (_, i) =>
     parseInt(binarySubnetMask.slice(i * 8, (i + 1) * 8), 2),
@@ -80,9 +75,8 @@ const validHosts = hosts > 2 ? hosts - 2 : hosts;
 {
     !error && (
         <>
-            <span>
-                New subnet mask: {newSubnetMask}/{hostBits}
-            </span>
+            <span>New subnet mask: {newSubnetMask}</span>
+            <span>CIDR notation: /{networkBits}</span>
             <div class="flex gap-x-1">
                 <span>Number of hosts for each subnet: {validHosts}</span>
                 {validHosts <= 2 && (
