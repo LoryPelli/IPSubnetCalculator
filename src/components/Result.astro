@@ -28,7 +28,7 @@ if (parseInt(first[0]) == 0) {
         maxSubnets = Math.pow(2, 8);
     }
 }
-const byteArray = z.array(z.number().min(0).max(255)).length(4);
+const byteArray = z.array(z.coerce.number().min(0).max(255)).length(4);
 if (!byteArray.safeParse(ip.split('.')).success) {
     error = true;
     errorMessage = 'Not a valid IP!';
