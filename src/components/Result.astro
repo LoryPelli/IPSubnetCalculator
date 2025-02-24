@@ -1,6 +1,5 @@
 ---
 import { z } from 'astro/zod';
-import count from '../utils/count';
 import Error from './Error.astro';
 interface Props {
     ip: string;
@@ -17,7 +16,7 @@ let errorMessage = '';
 if (parseInt(first[0]) == 0) {
     ipClass = 'A';
     defaultSubnetMask = '255.0.0.0';
-    maxSubnets = Math.pow(2, 8);
+    maxSubnets = Math.pow(2, 24);
 } else {
     if (parseInt(first[1]) == 0) {
         ipClass = 'B';
@@ -26,7 +25,7 @@ if (parseInt(first[0]) == 0) {
     } else {
         ipClass = 'C';
         defaultSubnetMask = '255.255.255.0';
-        maxSubnets = Math.pow(2, 24);
+        maxSubnets = Math.pow(2, 8);
     }
 }
 const byteArray = z.array(z.coerce.number().min(0).max(255)).length(4);
@@ -44,18 +43,13 @@ let binarySubnetMask = defaultSubnetMask
     .join('');
 let binarySubnetMaskArray = binarySubnetMask.split('');
 let bits = Math.ceil(Math.log2(subnets));
-for (let i = 0; i < binarySubnetMaskArray.length && bits > 0; i++) {
-    if (binarySubnetMaskArray[i] == '0') {
-        binarySubnetMaskArray[i] = '1';
-        bits--;
-    }
-}
-const networkBits = count(binarySubnetMaskArray, '1');
+binarySubnetMask.replace(/0/g, (_, i) => (i < bits ? '1' : '0'));
+const networkBits = binarySubnetMask.replace(/0/g, '').length;
 binarySubnetMask = binarySubnetMaskArray.join('');
 const newSubnetMask = Array.from({ length: 4 }, (_, i) =>
     parseInt(binarySubnetMask.slice(i * 8, (i + 1) * 8), 2),
 ).join('.');
-const hosts = Math.pow(2, totalBits - count(binarySubnetMask.split(''), '1'));
+const hosts = Math.pow(2, totalBits - networkBits);
 const validHosts = hosts > 2 ? hosts - 2 : hosts;
 ---
 
