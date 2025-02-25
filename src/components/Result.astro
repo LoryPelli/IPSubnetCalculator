@@ -8,6 +8,8 @@ interface Props {
 const { ip, subnets } = Astro.props;
 const first = parseInt(ip).toString(2).padStart(8, '0').split('');
 const totalBits = 32;
+let defaultNetworkBits: 8 | 16 | 24;
+let defaultHostBits: 8 | 16 | 24;
 let ipClass: 'A' | 'B' | 'C';
 let defaultSubnetMask: '255.0.0.0' | '255.255.0.0' | '255.255.255.0';
 let maxSubnets: number;
@@ -16,18 +18,20 @@ let errorMessage = '';
 if (parseInt(first[0]) == 0) {
     ipClass = 'A';
     defaultSubnetMask = '255.0.0.0';
-    maxSubnets = Math.pow(2, 24);
+    defaultNetworkBits = 8;
 } else {
     if (parseInt(first[1]) == 0) {
         ipClass = 'B';
         defaultSubnetMask = '255.255.0.0';
-        maxSubnets = Math.pow(2, 16);
+        defaultNetworkBits = 16;
     } else {
         ipClass = 'C';
         defaultSubnetMask = '255.255.255.0';
-        maxSubnets = Math.pow(2, 8);
+        defaultNetworkBits = 24;
     }
 }
+defaultHostBits = totalBits - defaultNetworkBits;
+maxSubnets = Math.pow(2, defaultHostBits);
 const byteArray = z.array(z.coerce.number().min(0).max(255)).length(4);
 if (!byteArray.safeParse(ip.split('.')).success) {
     error = true;
