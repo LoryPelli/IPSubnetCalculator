@@ -41,11 +41,11 @@ let binarySubnetMask = defaultSubnetMask
     .split('.')
     .map((n) => parseInt(n).toString(2).padStart(8, '0'))
     .join('');
-let binarySubnetMaskArray = binarySubnetMask.split('');
 let bits = Math.ceil(Math.log2(subnets));
-binarySubnetMask.replace(/0/g, (_, i) => (i < bits ? '1' : '0'));
+binarySubnetMask = binarySubnetMask.replace(/0/g, (_, i) =>
+    i < bits ? '1' : '0',
+);
 const networkBits = binarySubnetMask.replace(/0/g, '').length;
-binarySubnetMask = binarySubnetMaskArray.join('');
 const newSubnetMask = Array.from({ length: 4 }, (_, i) =>
     parseInt(binarySubnetMask.slice(i * 8, (i + 1) * 8), 2),
 ).join('.');
