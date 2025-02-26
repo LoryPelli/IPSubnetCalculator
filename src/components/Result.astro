@@ -6,6 +6,21 @@ interface Props {
     subnets: number;
 }
 const { ip, subnets } = Astro.props;
+let error = false;
+let errorMessage = '';
+if (
+    !z
+        .array(z.coerce.number().min(0).max(255))
+        .length(4)
+        .safeParse(ip.split('.')).success
+) {
+    error = true;
+    errorMessage = 'Not a valid IP!';
+}
+if (!z.coerce.number().min(1).safeParse(subnets).success) {
+    error = true;
+    errorMessage = 'Number of subnets must be >= 1';
+}
 const first = parseInt(ip).toString(2).padStart(8, '0').split('');
 const totalBits = 32;
 let defaultNetworkBits: 8 | 16 | 24;
@@ -13,8 +28,6 @@ let defaultHostBits: 8 | 16 | 24;
 let ipClass: 'A' | 'B' | 'C';
 let defaultSubnetMask: '255.0.0.0' | '255.255.0.0' | '255.255.255.0';
 let maxSubnets: number;
-let error = false;
-let errorMessage = '';
 if (parseInt(first[0]) == 0) {
     ipClass = 'A';
     defaultSubnetMask = '255.0.0.0';
@@ -32,11 +45,6 @@ if (parseInt(first[0]) == 0) {
 }
 defaultHostBits = totalBits - defaultNetworkBits;
 maxSubnets = Math.pow(2, defaultHostBits);
-const byteArray = z.array(z.coerce.number().min(0).max(255)).length(4);
-if (!byteArray.safeParse(ip.split('.')).success) {
-    error = true;
-    errorMessage = 'Not a valid IP!';
-}
 if (subnets > maxSubnets) {
     error = true;
     errorMessage = `Max number of subnets for a class ${ipClass} address is ${maxSubnets}!`;
@@ -46,8 +54,9 @@ let binarySubnetMask = defaultSubnetMask
     .map((n) => parseInt(n).toString(2).padStart(8, '0'))
     .join('');
 let bits = Math.ceil(Math.log2(subnets));
-binarySubnetMask = binarySubnetMask.replace(/0/g, (_, i) =>
-    i < bits ? '1' : '0',
+let i = 0;
+binarySubnetMask = binarySubnetMask.replace(/0/g, () =>
+    ++i <= bits ? '1' : '0',
 );
 const networkBits = binarySubnetMask.replace(/0/g, '').length;
 const newSubnetMask = Array.from({ length: 4 }, (_, i) =>
