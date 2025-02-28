@@ -22,6 +22,10 @@ if (!z.coerce.number().min(1).safeParse(subnets).success) {
     errorMessage = 'Number of subnets must be >= 1!';
 }
 const first = parseInt(ip).toString(2).padStart(8, '0').split('');
+if (first.slice(0, 3).join('') == '111') {
+    error = true;
+    errorMessage = 'Class D and E IPs cannot be assigned to hosts!';
+}
 const totalBits = 32;
 let defaultNetworkBits: 8 | 16 | 24;
 let defaultHostBits: 8 | 16 | 24;
@@ -66,12 +70,6 @@ const hosts = Math.pow(2, totalBits - networkBits);
 const validHosts = hosts > 2 ? hosts - 2 : hosts;
 ---
 
-<span class="font-bold">General information:</span>
-<span>IP: {ip}</span>
-<span>Number of subnets: {subnets}</span>
-<span>Class: {ipClass}</span>
-<span class="font-bold">Detailed information:</span>
-<span>Default subnet mask: {defaultSubnetMask}</span>
 {
     error && (
         <div class="pt-4">
@@ -82,6 +80,12 @@ const validHosts = hosts > 2 ? hosts - 2 : hosts;
 {
     !error && (
         <>
+            <span class="font-bold">General information:</span>
+            <span>IP: {ip}</span>
+            <span>Number of subnets: {subnets}</span>
+            <span>Class: {ipClass}</span>
+            <span class="font-bold">Detailed information:</span>
+            <span>Default subnet mask: {defaultSubnetMask}</span>
             <span>New subnet mask: {newSubnetMask}</span>
             <span>CIDR notation: /{networkBits}</span>
             <div class="flex gap-x-1">
