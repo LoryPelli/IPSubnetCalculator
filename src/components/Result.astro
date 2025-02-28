@@ -1,11 +1,14 @@
 ---
 import { z } from 'astro/zod';
 import Error from './Error.astro';
+import binary from '../utils/binary';
+import decimal from '../utils/decimal';
 interface Props {
     ip: string;
     subnets: number;
 }
 const { ip, subnets } = Astro.props;
+const binaryIP = binary(ip);
 let error = false;
 let errorMessage = '';
 if (
@@ -53,21 +56,19 @@ if (subnets > maxSubnets) {
     error = true;
     errorMessage = `Max number of subnets for a class ${ipClass} address is ${maxSubnets}!`;
 }
-let binarySubnetMask = defaultSubnetMask
-    .split('.')
-    .map((n) => parseInt(n).toString(2).padStart(8, '0'))
-    .join('');
+let binarySubnetMask = binary(defaultSubnetMask);
 let bits = Math.ceil(Math.log2(subnets));
 let i = 0;
 binarySubnetMask = binarySubnetMask.replace(/0/g, () =>
     ++i <= bits ? '1' : '0',
 );
 const networkBits = binarySubnetMask.replace(/0/g, '').length;
-const newSubnetMask = Array.from({ length: 4 }, (_, i) =>
-    parseInt(binarySubnetMask.slice(i * 8, (i + 1) * 8), 2),
-).join('.');
-const hosts = Math.pow(2, totalBits - networkBits);
+const subnetBits = networkBits - defaultNetworkBits;
+const newSubnetMask = decimal(binarySubnetMask);
+const hostBits = totalBits - networkBits;
+const hosts = Math.pow(2, hostBits);
 const validHosts = hosts > 2 ? hosts - 2 : hosts;
+const netID = decimal(binaryIP.slice(0, defaultNetworkBits));
 ---
 
 {
@@ -110,11 +111,25 @@ const validHosts = hosts > 2 ? hosts - 2 : hosts;
                         <th>Broadcast IP</th>
                     </thead>
                     <tbody class="border-2 text-center">
-                        {Array.from({ length: subnets }, (_, i) => (
-                            <tr>
-                                <td>Subnet {i}</td>
-                            </tr>
-                        ))}
+                        {Array.from({ length: subnets }, (_, i) => {
+                            const withSubnets = i
+                                .toString(2)
+                                .padStart(subnetBits, '0');
+                            const networkIP = `${netID}.${decimal(
+                                withSubnets.padEnd(defaultHostBits, '0'),
+                            )}`;
+                            const broadcastIP = `${netID}.${decimal(
+                                withSubnets.padEnd(defaultHostBits, '1'),
+                            )}`;
+                            return (
+                                <tr>
+                                    <td>Subnet {i}</td>
+                                    <td>{networkIP}</td>
+                                    <td />
+                                    <td>{broadcastIP}</td>
+                                </tr>
+                            );
+                        })}
                     </tbody>
                 </table>
             </div>
