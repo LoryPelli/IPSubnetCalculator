@@ -129,7 +129,10 @@ function pushRange(firstIP: string, lastIP: string) {
                         );
                         const networkIP = `${netID}.${network}`;
                         const broadcast = decimal(
-                            withSubnets.padEnd(defaultHostBits, '1'),
+                            (subnetBits != 0 ? withSubnets : '1').padEnd(
+                                defaultHostBits,
+                                '1',
+                            ),
                         );
                         const broadcastIP = `${netID}.${broadcast}`;
                         const firstIP =
