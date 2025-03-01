@@ -17,12 +17,12 @@
 >
 <button
     class="cursor-pointer rounded-md border-2 p-1.5"
-    onclick={() => (found = true)}>Find!</button
+    onclick={() => (found = true)}>Find</button
 >
 {#if found}
     {@const subnet = findSubnet(ip, ranges)}
     {@const host = findHost(ip, ranges)}
-    {#if !subnet && !host}
+    {#if !subnet || !host}
         <span class="font-bold text-red-600">Not a valid host IP!</span>
     {:else}
         <span>Subnet: <span class="font-bold">{subnet}</span></span>
