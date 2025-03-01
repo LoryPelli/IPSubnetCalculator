@@ -4,6 +4,8 @@ import Error from './Error.astro';
 import binary from '../utils/binary';
 import decimal from '../utils/decimal';
 import usable from '../utils/usable';
+import ThisIP from './ThisIP.svelte';
+import type { Range } from '../utils/types';
 interface Props {
     ip: string;
     subnets: number;
@@ -70,6 +72,10 @@ const hostBits = totalBits - networkBits;
 const hosts = Math.pow(2, hostBits);
 const validHosts = hosts > 2 ? hosts - 2 : hosts;
 const netID = decimal(binaryIP.slice(0, defaultNetworkBits));
+const ranges: Range[] = [];
+function pushRange(firstIP: string, lastIP: string) {
+    ranges.push({ first: firstIP, last: lastIP });
+}
 ---
 
 {
@@ -98,6 +104,7 @@ const netID = decimal(binaryIP.slice(0, defaultNetworkBits));
                     </span>
                 )}
             </div>
+            <ThisIP ip={ip} ranges={ranges} client:load />
             <div class="p-4">
                 <table>
                     <colgroup>
@@ -133,6 +140,7 @@ const netID = decimal(binaryIP.slice(0, defaultNetworkBits));
                                     ? broadcastIP
                                     : usable(broadcastIP, -1);
                             const equal = networkIP == broadcastIP;
+                            pushRange(firstIP, lastIP);
                             return (
                                 <tr>
                                     <td>Subnet {i}</td>
