@@ -3,6 +3,7 @@ import { z } from 'astro/zod';
 import Error from './Error.astro';
 import binary from '../utils/binary';
 import decimal from '../utils/decimal';
+import usable from '../utils/usable';
 interface Props {
     ip: string;
     subnets: number;
@@ -115,14 +116,26 @@ const netID = decimal(binaryIP.slice(0, defaultNetworkBits));
                             const withSubnets = i
                                 .toString(2)
                                 .padStart(subnetBits, '0');
-                            const networkIP = `${netID}.${decimal(
+                            const network = decimal(
                                 withSubnets.padEnd(defaultHostBits, '0'),
-                            )}`;
-                            const broadcastIP = `${netID}.${decimal(
+                            );
+                            const networkIP = `${netID}.${network}`;
+                            const broadcast = decimal(
                                 withSubnets.padEnd(defaultHostBits, '1'),
-                            )}`;
-                            const firstIP = validHosts <= 2 ? networkIP : '';
-                            const lastIP = validHosts <= 2 ? broadcastIP : '';
+                            );
+                            const broadcastIP = `${netID}.${broadcast}`;
+                            const firstIP =
+                                validHosts <= 2
+                                    ? networkIP
+                                    : usable(networkIP, defaultNetworkBits, 1);
+                            const lastIP =
+                                validHosts <= 2
+                                    ? broadcastIP
+                                    : usable(
+                                          broadcastIP,
+                                          defaultNetworkBits,
+                                          -1,
+                                      );
                             const equal = networkIP == broadcastIP;
                             return (
                                 <tr>
