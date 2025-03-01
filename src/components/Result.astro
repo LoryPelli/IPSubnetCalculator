@@ -73,7 +73,7 @@ const netID = decimal(binaryIP.slice(0, defaultNetworkBits));
 
 {
     error && (
-        <div class="pt-4">
+        <div class="p-4">
             <Error message={errorMessage} />
         </div>
     )
@@ -121,11 +121,19 @@ const netID = decimal(binaryIP.slice(0, defaultNetworkBits));
                             const broadcastIP = `${netID}.${decimal(
                                 withSubnets.padEnd(defaultHostBits, '1'),
                             )}`;
+                            const firstIP = validHosts <= 2 ? networkIP : '';
+                            const lastIP = validHosts <= 2 ? broadcastIP : '';
+                            const equal = networkIP == broadcastIP;
                             return (
                                 <tr>
                                     <td>Subnet {i}</td>
                                     <td>{networkIP}</td>
-                                    <td />
+                                    {equal && <td>{networkIP}</td>}
+                                    {!equal && (
+                                        <td>
+                                            {firstIP} - {lastIP}
+                                        </td>
+                                    )}
                                     <td>{broadcastIP}</td>
                                 </tr>
                             );
