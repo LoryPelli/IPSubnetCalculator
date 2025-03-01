@@ -10,7 +10,7 @@
     let found = $state(false);
 </script>
 
-<span
+<span class="flex flex-col items-center"
     >Find the subnet number and the host number of: <span class="font-bold"
         >{ip}</span
     ></span
