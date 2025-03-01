@@ -7,7 +7,7 @@ export function findSubnet(ip: string, ranges: Range[]) {
         const firstDecimal = parseInt(binary(ranges[i].first), 2);
         const lastDecimal = parseInt(binary(ranges[i].last), 2);
         if (decimal >= firstDecimal && decimal <= lastDecimal) {
-            return `Subnet ${i}`;
+            return i;
         }
     }
 }
@@ -24,7 +24,7 @@ export function findHost(ip: string, ranges: Range[]) {
                 j++, k++
             ) {
                 if (decimal == j) {
-                    return `Host Number ${k}`;
+                    return k;
                 }
             }
         }
