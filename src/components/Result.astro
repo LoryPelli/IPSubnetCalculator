@@ -127,15 +127,11 @@ const netID = decimal(binaryIP.slice(0, defaultNetworkBits));
                             const firstIP =
                                 validHosts <= 2
                                     ? networkIP
-                                    : usable(networkIP, defaultNetworkBits, 1);
+                                    : usable(networkIP, 1);
                             const lastIP =
                                 validHosts <= 2
                                     ? broadcastIP
-                                    : usable(
-                                          broadcastIP,
-                                          defaultNetworkBits,
-                                          -1,
-                                      );
+                                    : usable(broadcastIP, -1);
                             const equal = networkIP == broadcastIP;
                             return (
                                 <tr>

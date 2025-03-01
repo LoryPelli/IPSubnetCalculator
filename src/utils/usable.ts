@@ -1,6 +1,6 @@
-export default function usable(ip: string, bits: number, num: number) {
+export default function usable(ip: string, num: number) {
     return ip
         .split('.')
-        .map((n, i) => (i == bits / 8 ? parseInt(n) + num : n))
+        .map((n, i) => (i == 3 ? parseInt(n) + num : n))
         .join('.');
 }
