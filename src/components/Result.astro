@@ -96,14 +96,14 @@ function pushRange(firstIP: string, lastIP: string) {
             <span>Default subnet mask: {defaultSubnetMask}</span>
             <span>New subnet mask: {newSubnetMask}</span>
             <span>CIDR notation: /{networkBits}</span>
-            <div class="flex gap-x-1">
-                <span>Number of hosts for each subnet: {validHosts}</span>
+            <span class="flex gap-x-1">
+                Number of hosts for each subnet: {validHosts}
                 {validHosts <= 2 && (
                     <span class="font-bold">
                         (Special case when normal rule doesn't apply!)
                     </span>
                 )}
-            </div>
+            </span>
             <div class="flex min-h-24 flex-col items-center">
                 <ThisIP ip={ip} ranges={ranges} client:only />
             </div>
