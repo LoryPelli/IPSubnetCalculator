@@ -104,62 +104,58 @@ function pushRange(firstIP: string, lastIP: string) {
                     </span>
                 )}
             </div>
-            <div class="flex min-h-16 flex-col items-center">
+            <div class="flex min-h-24 flex-col items-center">
                 <ThisIP ip={ip} ranges={ranges} client:only />
             </div>
-            <div class="p-1">
-                <table>
-                    <colgroup>
-                        {Array.from({ length: 4 }, () => (
-                            <col class="w-64" />
-                        ))}
-                    </colgroup>
-                    <thead class="border-2">
-                        <th>Subnet</th>
-                        <th>Network IP</th>
-                        <th>Hosts Range</th>
-                        <th>Broadcast IP</th>
-                    </thead>
-                    <tbody class="border-2 text-center">
-                        {Array.from({ length: subnets }, (_, i) => {
-                            const withSubnets = i
-                                .toString(2)
-                                .padStart(subnetBits, '0');
-                            const network = decimal(
-                                withSubnets.padEnd(defaultHostBits, '0'),
-                            );
-                            const networkIP = `${netID}.${network}`;
-                            const broadcast = decimal(
-                                withSubnets.padEnd(defaultHostBits, '1'),
-                            );
-                            const broadcastIP = `${netID}.${broadcast}`;
-                            const firstIP =
-                                validHosts <= 2
-                                    ? networkIP
-                                    : usable(networkIP, 1);
-                            const lastIP =
-                                validHosts <= 2
-                                    ? broadcastIP
-                                    : usable(broadcastIP, -1);
-                            const equal = networkIP == broadcastIP;
-                            pushRange(firstIP, lastIP);
-                            return (
-                                <tr>
-                                    <td>Subnet {i}</td>
-                                    <td>{networkIP}</td>
-                                    {equal && <td>{networkIP}</td>}
-                                    {!equal && (
-                                        <td>
-                                            {firstIP} - {lastIP}
-                                        </td>
-                                    )}
-                                    <td>{broadcastIP}</td>
-                                </tr>
-                            );
-                        })}
-                    </tbody>
-                </table>
-            </div>
+            <table>
+                <colgroup>
+                    {Array.from({ length: 4 }, () => (
+                        <col class="w-64" />
+                    ))}
+                </colgroup>
+                <thead class="border-2">
+                    <th>Subnet</th>
+                    <th>Network IP</th>
+                    <th>Hosts Range</th>
+                    <th>Broadcast IP</th>
+                </thead>
+                <tbody class="border-2 text-center">
+                    {Array.from({ length: subnets }, (_, i) => {
+                        const withSubnets = i
+                            .toString(2)
+                            .padStart(subnetBits, '0');
+                        const network = decimal(
+                            withSubnets.padEnd(defaultHostBits, '0'),
+                        );
+                        const networkIP = `${netID}.${network}`;
+                        const broadcast = decimal(
+                            withSubnets.padEnd(defaultHostBits, '1'),
+                        );
+                        const broadcastIP = `${netID}.${broadcast}`;
+                        const firstIP =
+                            validHosts <= 2 ? networkIP : usable(networkIP, 1);
+                        const lastIP =
+                            validHosts <= 2
+                                ? broadcastIP
+                                : usable(broadcastIP, -1);
+                        const equal = networkIP == broadcastIP;
+                        pushRange(firstIP, lastIP);
+                        return (
+                            <tr>
+                                <td>Subnet {i}</td>
+                                <td>{networkIP}</td>
+                                {equal && <td>{networkIP}</td>}
+                                {!equal && (
+                                    <td>
+                                        {firstIP} - {lastIP}
+                                    </td>
+                                )}
+                                <td>{broadcastIP}</td>
+                            </tr>
+                        );
+                    })}
+                </tbody>
+            </table>
         </>
     )
 }
