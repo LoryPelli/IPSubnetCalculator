@@ -104,8 +104,10 @@ function pushRange(firstIP: string, lastIP: string) {
                     </span>
                 )}
             </div>
-            <ThisIP ip={ip} ranges={ranges} client:load />
-            <div class="p-4">
+            <div class="flex min-h-24 flex-col items-center">
+                <ThisIP ip={ip} ranges={ranges} client:only />
+            </div>
+            <div class="p-1">
                 <table>
                     <colgroup>
                         {Array.from({ length: 4 }, () => (
