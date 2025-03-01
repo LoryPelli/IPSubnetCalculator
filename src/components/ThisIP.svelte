@@ -22,7 +22,7 @@
 {#if found}
     {@const subnet = findSubnet(ip, ranges)}
     {@const host = findHost(ip, ranges)}
-    {#if !subnet || !host}
+    {#if subnet == -1 || host == -1}
         <span class="font-bold text-red-600">Not a valid host IP!</span>
     {:else}
         <span>Subnet: <span class="font-bold">{subnet}</span></span>

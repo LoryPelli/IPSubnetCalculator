@@ -10,6 +10,7 @@ export function findSubnet(ip: string, ranges: Range[]) {
             return i;
         }
     }
+    return -1;
 }
 
 export function findHost(ip: string, ranges: Range[]) {
@@ -29,4 +30,5 @@ export function findHost(ip: string, ranges: Range[]) {
             }
         }
     }
+    return -1;
 }
