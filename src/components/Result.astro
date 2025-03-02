@@ -1,8 +1,7 @@
 ---
 import { z } from 'astro/zod';
 import Error from './Error.astro';
-import binary from '../utils/binary';
-import decimal from '../utils/decimal';
+import { binary, decimal } from '../utils/conversion';
 import usable from '../utils/usable';
 import ThisIP from './ThisIP.svelte';
 import FindIP from './FindIP.svelte';
@@ -107,8 +106,8 @@ function pushRange(firstIP: string, lastIP: string) {
             </span>
             <div class="flex flex-col items-center gap-y-1">
                 <div class="flex min-h-56 min-w-96 flex-col items-center rounded-md border-2 p-4 shadow-2xl shadow-black">
-                    <ThisIP ip={ip} ranges={ranges} client:only />
-                    <FindIP subnets={subnets} hosts={validHosts} client:only />
+                    <ThisIP {ip} {ranges} client:only />
+                    <FindIP {subnets} hosts={validHosts} {ranges} client:only />
                 </div>
                 <table>
                     <colgroup>

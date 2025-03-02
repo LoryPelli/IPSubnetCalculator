@@ -1,4 +1,4 @@
-import binary from './binary';
+import { binary, decimal } from '../utils/conversion';
 import type { Range } from './types';
 
 export function findSubnet(ip: string, ranges: Range[]) {
@@ -31,4 +31,15 @@ export function findHost(ip: string, ranges: Range[]) {
         }
     }
     return -1;
+}
+
+export function findIP(subnet: number, host: number, ranges: Range[]) {
+    const range = ranges[subnet];
+    const firstDecimal = parseInt(binary(range.first), 2);
+    const lastDecimal = parseInt(binary(range.last), 2);
+    for (let i = firstDecimal; i <= lastDecimal; i++) {
+        if (i - firstDecimal == host) {
+            return decimal(binary((i - 1).toString()));
+        }
+    }
 }
