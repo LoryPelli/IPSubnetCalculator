@@ -38,8 +38,8 @@ export function findIP(subnet: number, host: number, ranges: Range[]) {
     const firstDecimal = parseInt(binary(range.first), 2);
     const lastDecimal = parseInt(binary(range.last), 2);
     for (let i = firstDecimal; i <= lastDecimal; i++) {
-        if (i - firstDecimal == host) {
-            return decimal(binary((i - 1).toString()));
+        if (i + 1 - firstDecimal == host) {
+            return decimal(binary(i.toString()));
         }
     }
 }
