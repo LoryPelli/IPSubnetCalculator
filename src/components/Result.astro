@@ -96,7 +96,7 @@ function pushRange(firstIP: string, lastIP: string) {
             <span>Default subnet mask: {defaultSubnetMask}</span>
             <span>New subnet mask: {newSubnetMask}</span>
             <span>CIDR notation: /{networkBits}</span>
-            <span class="flex gap-x-1">
+            <span class="flex flex-col items-center gap-x-1 md:flex-row">
                 Number of hosts for each subnet: {validHosts}
                 {validHosts <= 2 && (
                     <span class="font-bold">
