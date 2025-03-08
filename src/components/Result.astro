@@ -71,6 +71,7 @@ const newSubnetMask = decimal(binarySubnetMask);
 const hostBits = totalBits - networkBits;
 const hosts = Math.pow(2, hostBits);
 const validHosts = hosts > 2 ? hosts - 2 : hosts;
+const special = networkBits == 31 || networkBits == 32;
 const netID = decimal(binaryIP.slice(0, defaultNetworkBits));
 const ranges: Range[] = [];
 function pushRange(firstIP: string, lastIP: string) {
@@ -98,7 +99,7 @@ function pushRange(firstIP: string, lastIP: string) {
             <span>CIDR notation: /{networkBits}</span>
             <span class="flex flex-col items-center gap-x-1 md:flex-row">
                 Number of hosts for each subnet: {validHosts}
-                {validHosts <= 2 && (
+                {special && (
                     <span class="font-bold">
                         (Special case when normal rule doesn't apply!)
                     </span>
@@ -137,14 +138,12 @@ function pushRange(firstIP: string, lastIP: string) {
                                 ),
                             );
                             const broadcastIP = `${netID}.${broadcast}`;
-                            const firstIP =
-                                validHosts <= 2
-                                    ? networkIP
-                                    : usable(networkIP, 1);
-                            const lastIP =
-                                validHosts <= 2
-                                    ? broadcastIP
-                                    : usable(broadcastIP, -1);
+                            const firstIP = special
+                                ? networkIP
+                                : usable(networkIP, 1);
+                            const lastIP = special
+                                ? broadcastIP
+                                : usable(broadcastIP, -1);
                             const equal = networkIP == broadcastIP;
                             pushRange(firstIP, lastIP);
                             return (
