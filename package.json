@@ -10,12 +10,12 @@
         "format": "prettier --write ."
     },
     "dependencies": {
-        "@astrojs/cloudflare": "^12.2.3",
-        "@astrojs/svelte": "^7.0.5",
-        "@tailwindcss/vite": "^4.0.12",
-        "astro": "^5.4.2",
-        "svelte": "^5.22.5",
-        "tailwindcss": "^4.0.12",
+        "@astrojs/cloudflare": "^12.2.4",
+        "@astrojs/svelte": "^7.0.6",
+        "@tailwindcss/vite": "^4.0.14",
+        "astro": "^5.5.2",
+        "svelte": "^5.23.1",
+        "tailwindcss": "^4.0.14",
         "typescript": "^5.8.2"
     },
     "devDependencies": {

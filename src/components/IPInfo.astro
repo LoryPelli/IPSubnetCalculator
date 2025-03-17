@@ -56,10 +56,13 @@ function pushRange(firstIP: string, lastIP: string) {
 </span>
 <div class="flex flex-col items-center gap-y-1">
     <div
-        class="flex min-h-56 min-w-96 flex-col items-center rounded-md border-2 p-4 shadow-2xl shadow-black"
+        class="flex min-h-56 min-w-96 flex-col items-center justify-center rounded-md border-2 p-4 shadow-2xl shadow-black"
     >
         <ThisIP {ip} {ranges} client:only />
         <FindIP {subnets} hosts={validHosts} {ranges} client:only />
+        <noscript class="text-2xl font-bold"
+            >You need to enable JavaScript!</noscript
+        >
     </div>
     <table>
         <colgroup>
