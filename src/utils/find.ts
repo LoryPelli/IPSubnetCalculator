@@ -39,7 +39,7 @@ export function findIP(subnet: number, host: number, ranges: Range[]) {
     const lastDecimal = parseInt(binary(range.last), 2);
     for (let i = firstDecimal; i <= lastDecimal; i++) {
         if (i + 1 - firstDecimal == host) {
-            return decimal(binary(i.toString()));
+            return decimal(binary(i.toString()).padStart(32, '0'));
         }
     }
 }
