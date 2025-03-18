@@ -39,6 +39,7 @@ const ip = computed(() => findIP(subnet.value, host.value, ranges));
                     <div
                         class="w-16 border-2 rounded-md cursor-pointer"
                         @click="
+                            found = false;
                             showSubnet = false;
                             subnet = props.index;
                         "
@@ -67,6 +68,7 @@ const ip = computed(() => findIP(subnet.value, host.value, ranges));
                     <div
                         class="w-16 border-2 rounded-md cursor-pointer"
                         @click="
+                            found = false;
                             showHost = false;
                             host = props.index + 1;
                         "
