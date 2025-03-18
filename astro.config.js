@@ -1,5 +1,6 @@
 import cloudflare from '@astrojs/cloudflare';
 import svelte from '@astrojs/svelte';
+import vue from '@astrojs/vue';
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'astro/config';
 
@@ -8,6 +9,6 @@ export default defineConfig({
     vite: {
         plugins: [tailwindcss()],
     },
-    integrations: [svelte()],
+    integrations: [svelte(), vue()],
     adapter: cloudflare(),
 });
