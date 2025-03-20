@@ -48,7 +48,7 @@ const ip = computed(() =>
                             subnet = props.index;
                         "
                     >
-                        {{ props.index }}
+                        <span>{{ props.index }}</span>
                     </div>
                 </template>
             </UseVirtualList>
@@ -77,7 +77,7 @@ const ip = computed(() =>
                             host = props.index + 1;
                         "
                     >
-                        {{ props.index + 1 }}
+                        <span>{{ props.index + 1 }}</span>
                     </div>
                 </template>
             </UseVirtualList>
