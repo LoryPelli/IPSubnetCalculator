@@ -1,18 +1,18 @@
 <script lang="ts">
+    import { decimal } from '../utils/conversion';
     import { findSubnet, findHost } from '../utils/find';
-    import type { Range } from '../utils/types';
     interface Props {
         ip: string;
-        subnets: number;
-        ranges: Range[];
+        networkBits: number;
+        subnetBits: number;
     }
-    const { ip, ranges }: Props = $props();
+    const { ip, networkBits, subnetBits }: Props = $props();
     let found = $state(false);
 </script>
 
 <span class="flex flex-col items-center"
     >Find the subnet number and the host number of: <span class="font-bold"
-        >{ip}</span
+        >{decimal(ip)}</span
     ></span
 >
 <button
@@ -20,8 +20,8 @@
     onclick={() => (found = true)}>Find</button
 >
 {#if found}
-    {@const subnet = findSubnet(ip, ranges)}
-    {@const host = findHost(ip, ranges)}
+    {@const subnet = findSubnet(ip, networkBits, subnetBits)}
+    {@const host = findHost(ip, networkBits, subnetBits)}
     {#if subnet == -1 || host == -1}
         <span class="font-bold text-red-600">Not a valid host IP!</span>
     {:else}

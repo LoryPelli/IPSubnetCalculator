@@ -2,19 +2,23 @@
 import { UseVirtualList } from '@vueuse/components';
 import { computed, ref } from 'vue';
 import { findIP } from '../utils/find';
-import type { Range } from '../utils/types';
 interface Props {
+    startIP: string;
     subnets: number;
     hosts: number;
-    ranges: Range[];
+    networkBits: number;
+    subnetBits: number;
 }
-const { subnets, hosts, ranges } = defineProps<Props>();
+const { startIP, subnets, hosts, networkBits, subnetBits } =
+    defineProps<Props>();
 const subnet = ref(0);
 const host = ref(1);
 const found = ref(false);
 const showSubnet = ref(false);
 const showHost = ref(false);
-const ip = computed(() => findIP(subnet.value, host.value, ranges));
+const ip = computed(() =>
+    findIP(startIP, subnet.value, host.value, networkBits, subnetBits),
+);
 </script>
 
 <template>

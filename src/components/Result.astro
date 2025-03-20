@@ -29,7 +29,6 @@ if (first.slice(0, 3).join('') == '111') {
     error = true;
     errorMessage = 'Class D and E IPs cannot be assigned to hosts!';
 }
-const totalBits = 32;
 let defaultNetworkBits: 8 | 16 | 24;
 let defaultHostBits: 8 | 16 | 24;
 let ipClass: 'A' | 'B' | 'C';
@@ -91,7 +90,7 @@ if (subnets > maxSubnets) {
                 const networkBits = binarySubnetMask.replace(/0/g, '').length;
                 const subnetBits = networkBits - defaultNetworkBits;
                 const newSubnetMask = decimal(binarySubnetMask);
-                const hostBits = totalBits - networkBits;
+                const hostBits = 32 - networkBits;
                 const hosts = Math.pow(2, hostBits);
                 const validHosts = hosts > 2 ? hosts - 2 : hosts;
                 const isSpecial = networkBits == 31 || networkBits == 32;
@@ -103,6 +102,7 @@ if (subnets > maxSubnets) {
                         {ipClass}
                         {defaultSubnetMask}
                         {defaultHostBits}
+                        {defaultNetworkBits}
                         {netID}
                         {newSubnetMask}
                         {networkBits}

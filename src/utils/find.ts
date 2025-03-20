@@ -1,45 +1,32 @@
-import { binary, decimal } from '../utils/conversion';
-import type { Range } from './types';
+import { decimal } from './conversion';
 
-export function findSubnet(ip: string, ranges: Range[]) {
-    const decimal = parseInt(binary(ip), 2);
-    for (let i = 0; i < ranges.length; i++) {
-        const firstDecimal = parseInt(binary(ranges[i].first), 2);
-        const lastDecimal = parseInt(binary(ranges[i].last), 2);
-        if (decimal >= firstDecimal && decimal <= lastDecimal) {
-            return i;
-        }
-    }
-    return -1;
+export function findSubnet(
+    ip: string,
+    networkBits: number,
+    subnetBits: number,
+) {
+    const host = ip.slice(networkBits);
+    return parseInt(host.slice(0, subnetBits), 2) || 0;
 }
 
-export function findHost(ip: string, ranges: Range[]) {
-    const decimal = parseInt(binary(ip), 2);
-    for (let i = 0; i < ranges.length; i++) {
-        const firstDecimal = parseInt(binary(ranges[i].first), 2);
-        const lastDecimal = parseInt(binary(ranges[i].last), 2);
-        if (decimal >= firstDecimal && decimal <= lastDecimal) {
-            for (
-                let j = firstDecimal, k = 1;
-                j <= lastDecimal && k <= j;
-                j++, k++
-            ) {
-                if (decimal == j) {
-                    return k;
-                }
-            }
-        }
-    }
-    return -1;
+export function findHost(ip: string, networkBits: number, subnetBits: number) {
+    const host = ip.slice(networkBits);
+    return parseInt(host.slice(subnetBits), 2) || 1;
 }
 
-export function findIP(subnet: number, host: number, ranges: Range[]) {
-    const range = ranges[subnet];
-    const firstDecimal = parseInt(binary(range.first), 2);
-    const lastDecimal = parseInt(binary(range.last), 2);
-    for (let i = firstDecimal; i <= lastDecimal; i++) {
-        if (i + 1 - firstDecimal == host) {
-            return decimal(binary(i.toString()).padStart(32, '0'));
-        }
-    }
+export function findIP(
+    startIP: string,
+    subnet: number,
+    host: number,
+    networkBits: number,
+    subnetBits: number,
+) {
+    const binarySubnet = subnet.toString(2).padStart(subnetBits, '0');
+    const binaryHost = host
+        .toString(2)
+        .padStart(32 - networkBits - subnetBits, '0');
+    const network = startIP.slice(0, networkBits);
+    const ip = network + binarySubnet + binaryHost;
+    console.log(ip);
+    return decimal(ip);
 }

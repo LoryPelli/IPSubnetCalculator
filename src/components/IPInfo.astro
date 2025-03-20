@@ -2,13 +2,13 @@
 import usable from '../utils/usable';
 import ThisIP from './ThisIP.svelte';
 import FindIP from './FindIP.vue';
-import type { Range } from '../utils/types';
-import { decimal } from '../utils/conversion';
+import { binary, decimal } from '../utils/conversion';
 interface Props {
     ip: string;
     subnets: number;
     ipClass: 'A' | 'B' | 'C';
     defaultSubnetMask: '255.0.0.0' | '255.255.0.0' | '255.255.255.0';
+    defaultNetworkBits: 8 | 16 | 24;
     defaultHostBits: 8 | 16 | 24;
     netID: string;
     newSubnetMask: string;
@@ -22,6 +22,7 @@ const {
     subnets,
     ipClass,
     defaultSubnetMask,
+    defaultNetworkBits,
     defaultHostBits,
     netID,
     newSubnetMask,
@@ -30,10 +31,21 @@ const {
     validHosts,
     isSpecial,
 } = Astro.props;
-const ranges: Range[] = [];
-function pushRange(firstIP: string, lastIP: string) {
-    ranges.push({ first: firstIP, last: lastIP });
+const binaryIP = binary(ip);
+const items = 250;
+const needsPages = subnets > items;
+const maxPage = Math.ceil(subnets / items);
+const isPOST = Astro.request.method == 'POST';
+let page = 1;
+if (isPOST) {
+    const formData = await Astro.request.formData();
+    const data = formData.get('page')?.toString() || '';
+    page = parseInt(data);
 }
+if (needsPages && page > maxPage) {
+    return Astro.redirect('/');
+}
+const offset = page * items - items;
 ---
 
 <span class="font-bold">General information:</span>
@@ -58,8 +70,20 @@ function pushRange(firstIP: string, lastIP: string) {
     <div
         class="flex min-h-56 min-w-96 flex-col items-center justify-center rounded-md border-2 p-4 shadow-2xl shadow-black"
     >
-        <ThisIP {ip} {ranges} client:only />
-        <FindIP {subnets} hosts={validHosts} {ranges} client:only />
+        <ThisIP
+            ip={binaryIP}
+            networkBits={defaultNetworkBits}
+            {subnetBits}
+            client:only
+        />
+        <FindIP
+            startIP={binaryIP}
+            subnets={needsPages ? items : subnets}
+            hosts={validHosts}
+            networkBits={defaultNetworkBits}
+            {subnetBits}
+            client:only
+        />
         <noscript class="text-2xl font-bold"
             >You need to enable JavaScript!</noscript
         >
@@ -76,8 +100,11 @@ function pushRange(firstIP: string, lastIP: string) {
         </thead>
         <tbody class="border-2 text-center">
             {
-                Array.from({ length: subnets }, (_, i) => {
-                    const withSubnets = i.toString(2).padStart(subnetBits, '0');
+                Array.from({ length: needsPages ? items : subnets }, (_, i) => {
+                    const subnet = i + offset;
+                    const withSubnets = subnet
+                        .toString(2)
+                        .padStart(subnetBits, '0');
                     const network = decimal(
                         withSubnets.padEnd(defaultHostBits, '0'),
                     );
@@ -96,10 +123,9 @@ function pushRange(firstIP: string, lastIP: string) {
                         ? broadcastIP
                         : usable(broadcastIP, -1);
                     const equal = networkIP == broadcastIP;
-                    pushRange(firstIP, lastIP);
                     return (
                         <tr>
-                            <td>Subnet {i}</td>
+                            <td>Subnet {subnet}</td>
                             <td>{networkIP}</td>
                             {equal && <td>{networkIP}</td>}
                             {!equal && (
@@ -114,4 +140,27 @@ function pushRange(firstIP: string, lastIP: string) {
             }
         </tbody>
     </table>
+    {
+        needsPages && (
+            <form method="post" class="flex items-center gap-x-2 py-2">
+                <label>Go to page number:</label>
+                <input
+                    type="number"
+                    name="page"
+                    autocomplete="off"
+                    value={page}
+                    min="1"
+                    max={maxPage}
+                    required
+                    class="rounded-md border-2 p-1.5 text-center"
+                />
+                <button
+                    type="submit"
+                    class="cursor-pointer rounded-md border-2 p-1.5"
+                >
+                    Go!
+                </button>
+            </form>
+        )
+    }
 </div>
