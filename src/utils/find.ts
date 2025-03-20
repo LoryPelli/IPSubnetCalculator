@@ -6,11 +6,19 @@ export function findSubnet(
     subnetBits: number,
 ) {
     const host = ip.slice(networkBits);
+    const hostBits = 32 - networkBits;
+    if (host == '0'.repeat(hostBits) || host == '1'.repeat(hostBits)) {
+        return -1;
+    }
     return parseInt(host.slice(0, subnetBits), 2) || 0;
 }
 
 export function findHost(ip: string, networkBits: number, subnetBits: number) {
     const host = ip.slice(networkBits);
+    const hostBits = 32 - networkBits;
+    if (host == '0'.repeat(hostBits) || host == '1'.repeat(hostBits)) {
+        return -1;
+    }
     return parseInt(host.slice(subnetBits), 2) || 1;
 }
 
