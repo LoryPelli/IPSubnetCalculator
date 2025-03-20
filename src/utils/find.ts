@@ -27,6 +27,5 @@ export function findIP(
         .padStart(32 - networkBits - subnetBits, '0');
     const network = startIP.slice(0, networkBits);
     const ip = network + binarySubnet + binaryHost;
-    console.log(ip);
     return decimal(ip);
 }
