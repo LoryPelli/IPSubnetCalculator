@@ -46,6 +46,11 @@ if (needsPages && page > maxPage) {
     return Astro.redirect('/');
 }
 const offset = page * items - items;
+const itemsRemains = subnets - items * (page - 1);
+let length = needsPages ? items : subnets;
+if (itemsRemains < items) {
+    length = itemsRemains;
+}
 ---
 
 <span class="font-bold">General information:</span>
@@ -100,7 +105,7 @@ const offset = page * items - items;
         </thead>
         <tbody class="border-2 text-center">
             {
-                Array.from({ length: needsPages ? items : subnets }, (_, i) => {
+                Array.from({ length }, (_, i) => {
                     const subnet = i + offset;
                     const withSubnets = subnet
                         .toString(2)
