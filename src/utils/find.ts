@@ -9,8 +9,10 @@ export function findSubnet(
     const withSubnet = host.slice(subnetBits);
     const hostBits = 32 - networkBits - subnetBits;
     if (
-        withSubnet == '0'.repeat(hostBits) ||
-        withSubnet == '1'.repeat(hostBits)
+        hostBits != 0 &&
+        hostBits != 1 &&
+        (withSubnet == '0'.repeat(hostBits) ||
+            withSubnet == '1'.repeat(hostBits))
     ) {
         return -1;
     }
@@ -22,8 +24,10 @@ export function findHost(ip: string, networkBits: number, subnetBits: number) {
     const withSubnet = host.slice(subnetBits);
     const hostBits = 32 - networkBits - subnetBits;
     if (
-        withSubnet == '0'.repeat(hostBits) ||
-        withSubnet == '1'.repeat(hostBits)
+        hostBits != 0 &&
+        hostBits != 1 &&
+        (withSubnet == '0'.repeat(hostBits) ||
+            withSubnet == '1'.repeat(hostBits))
     ) {
         return -1;
     }
