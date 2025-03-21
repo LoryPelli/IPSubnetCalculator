@@ -3,6 +3,7 @@ import usable from '../utils/usable';
 import ThisIP from './ThisIP.svelte';
 import FindIP from './FindIP.vue';
 import { binary, decimal } from '../utils/conversion';
+import wildcardMask from '../utils/wildcard';
 interface Props {
     ip: string;
     subnets: number;
@@ -32,6 +33,8 @@ const {
     isSpecial,
 } = Astro.props;
 const binaryIP = binary(ip);
+const defaultWildcardMark = wildcardMask(defaultSubnetMask);
+const newWildcardMask = wildcardMask(newSubnetMask);
 const items = 250;
 const needsPages = subnets > items;
 const maxPage = Math.ceil(subnets / items);
@@ -60,6 +63,8 @@ if (itemsRemains < items) {
 <span class="font-bold">Detailed information:</span>
 <span>Default subnet mask: {defaultSubnetMask}</span>
 <span>New subnet mask: {newSubnetMask}</span>
+<span>Default wildcard mask: {defaultWildcardMark}</span>
+<span>New wildcard mask: {newWildcardMask}</span>
 <span>CIDR notation: /{networkBits}</span>
 <span class="flex flex-col items-center gap-x-1 md:flex-row">
     Number of hosts for each subnet: {validHosts}
