@@ -79,7 +79,7 @@ if (itemsRemains < items) {
 </span>
 <div class="flex flex-col items-center gap-y-1">
     <div
-        class="flex min-h-52 flex-col items-center justify-center rounded-md border-2 px-2 shadow-2xl shadow-black"
+        class="flex min-h-52 min-w-96 flex-col items-center justify-center rounded-md border-2 px-2 shadow-2xl shadow-black"
     >
         <ThisIP
             ip={binaryIP}
@@ -111,10 +111,12 @@ if (itemsRemains < items) {
                 {Array.from({ length: 9 }, () => <LoadingIndicator />)}
             </div>
         </FindIP>
-        <noscript>
-            <span class="text-2xl font-bold"
-                >You need to enable JavaScript!</span
-            ></noscript
+        <noscript class="absolute">
+            <div class="bg-red-600 px-2 py-4 shadow-2xl shadow-black">
+                <span class="text-2xl font-bold text-white"
+                    >You need to enable JavaScript!</span
+                >
+            </div></noscript
         >
     </div>
     <table>
