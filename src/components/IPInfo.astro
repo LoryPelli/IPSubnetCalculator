@@ -4,6 +4,7 @@ import ThisIP from './ThisIP.svelte';
 import FindIP from './FindIP.vue';
 import { binary, decimal } from '../utils/conversion';
 import wildcardMask from '../utils/wildcard';
+import LoadingIndicator from './LoadingIndicator.astro';
 interface Props {
     ip: string;
     subnets: number;
@@ -85,7 +86,15 @@ if (itemsRemains < items) {
             networkBits={defaultNetworkBits}
             {subnetBits}
             client:only
-        />
+        >
+            <div
+                slot="fallback"
+                data-fallback
+                class="flex h-16 w-full items-center justify-center"
+            >
+                {Array.from({ length: 9 }, () => <LoadingIndicator />)}
+            </div>
+        </ThisIP>
         <FindIP
             startIP={binaryIP}
             subnets={needsPages ? items : subnets}
@@ -93,9 +102,24 @@ if (itemsRemains < items) {
             networkBits={defaultNetworkBits}
             {subnetBits}
             client:only
-        />
-        <noscript class="text-2xl font-bold"
-            >You need to enable JavaScript!</noscript
+        >
+            <div
+                slot="fallback"
+                data-fallback
+                class="flex h-16 w-full items-center justify-center"
+            >
+                {Array.from({ length: 9 }, () => <LoadingIndicator />)}
+            </div>
+        </FindIP>
+        <noscript>
+            <style>
+                [data-fallback] {
+                    display: none;
+                }
+            </style>
+            <span class="text-2xl font-bold"
+                >You need to enable JavaScript!</span
+            ></noscript
         >
     </div>
     <table>
@@ -153,7 +177,7 @@ if (itemsRemains < items) {
     {
         needsPages && (
             <form method="post" class="flex items-center gap-x-2 py-2">
-                <label>Go to page number:</label>
+                <span>Go to page number:</span>
                 <input
                     type="number"
                     name="page"
