@@ -44,5 +44,12 @@ const show = bytes && subnets ? true : false;
             >
         </div>
     </form>
-    {show && <Result ip={bytes.join('.')} subnets={parseInt(subnets || '')} />}
+    {
+        show && (
+            <Result
+                ip={bytes.map((b) => parseInt(b)).join('.')}
+                subnets={parseInt(subnets || '')}
+            />
+        )
+    }
 </Layout>
