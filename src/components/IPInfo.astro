@@ -61,14 +61,16 @@ if (itemsRemains < items) {
 <span>IP: {ip}</span>
 <span>Number of subnets: {subnets}</span>
 <span>Class: {ipClass}</span>
-<span class="font-bold">Detailed information:</span>
-<span>Default subnet mask: {defaultSubnetMask}</span>
-<span>New subnet mask: {newSubnetMask}</span>
-<span>Default wildcard mask: {defaultWildcardMark}</span>
-<span>New wildcard mask: {newWildcardMask}</span>
+<span class="font-bold">Default:</span>
+<span>Subnet mask: {defaultSubnetMask}</span>
+<span>Wildcard mask: {defaultWildcardMark}</span>
+<span>CIDR notation: /{defaultNetworkBits}</span>
+<span class="font-bold">Custom:</span>
+<span>Subnet mask: {newSubnetMask}</span>
+<span>Wildcard mask: {newWildcardMask}</span>
 <span>CIDR notation: /{networkBits}</span>
-<span class="flex flex-col items-center gap-x-1 md:flex-row">
-    Number of hosts for each subnet: {validHosts}
+<div class="flex flex-col items-center gap-x-1 md:flex-row">
+    <span>Number of hosts for each subnet: {validHosts}</span>
     {
         isSpecial && (
             <span class="font-bold">
@@ -76,7 +78,7 @@ if (itemsRemains < items) {
             </span>
         )
     }
-</span>
+</div>
 <div class="flex flex-col items-center gap-y-1">
     <div
         class="flex min-h-52 min-w-96 flex-col items-center justify-center rounded-md border-2 p-2 shadow-2xl shadow-black"
