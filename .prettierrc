@@ -20,12 +20,6 @@
             "options": {
                 "parser": "svelte"
             }
-        },
-        {
-            "files": "*.vue",
-            "options": {
-                "parser": "vue"
-            }
         }
     ]
 }
