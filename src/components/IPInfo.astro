@@ -5,17 +5,19 @@ import FindIP from './FindIP.vue';
 import { binary, decimal } from '../utils/conversion';
 import wildcardMask from '../utils/wildcard';
 import LoadingIndicator from './LoadingIndicator.astro';
+import Binary from './Binary.astro';
 interface Props {
     ip: string;
     subnets: number;
     ipClass: 'A' | 'B' | 'C';
-    defaultSubnetMask: '255.0.0.0' | '255.255.0.0' | '255.255.255.0';
     defaultNetworkBits: 8 | 16 | 24;
+    defaultSubnetMask: '255.0.0.0' | '255.255.0.0' | '255.255.255.0';
     defaultHostBits: 8 | 16 | 24;
     netID: string;
     newSubnetMask: string;
     networkBits: number;
     subnetBits: number;
+    hostBits: number;
     validHosts: number;
     isSpecial: boolean;
 }
@@ -23,19 +25,25 @@ const {
     ip,
     subnets,
     ipClass,
-    defaultSubnetMask,
     defaultNetworkBits,
+    defaultSubnetMask,
     defaultHostBits,
     netID,
     newSubnetMask,
     networkBits,
     subnetBits,
+    hostBits,
     validHosts,
     isSpecial,
 } = Astro.props;
 const binaryIP = binary(ip);
+const binaryDefaultSubnetMask = binary(defaultSubnetMask);
+const binaryNewSubnetMask = binary(newSubnetMask);
+const maxSubnets = Math.pow(2, subnetBits);
 const defaultWildcardMark = wildcardMask(defaultSubnetMask);
 const newWildcardMask = wildcardMask(newSubnetMask);
+const binaryDefaultWildcardMask = binary(defaultWildcardMark);
+const binaryNewWildcardMask = binary(newWildcardMask);
 const items = 250;
 const needsPages = subnets > items;
 const maxPage = Math.ceil(subnets / items);
@@ -59,18 +67,46 @@ if (itemsRemains < items) {
 
 <span class="font-bold">General information:</span>
 <span>IP: {ip}</span>
-<span>Number of subnets: {subnets}</span>
 <span>Class: {ipClass}</span>
+<span>Total bits: {defaultHostBits}</span>
+<span>Subnet bits: {subnetBits}</span>
+<span>Host bits: {hostBits}</span>
+<span>Max subnets: 2^{subnetBits}={maxSubnets}</span>
+<span>Number of subnets: {subnets}</span>
 <span class="font-bold">Default:</span>
 <span>Subnet mask: {defaultSubnetMask}</span>
+<Binary
+    value={binaryDefaultSubnetMask}
+    networkBits={defaultNetworkBits}
+    {subnetBits}
+/>
 <span>Wildcard mask: {defaultWildcardMark}</span>
+<Binary
+    value={binaryDefaultWildcardMask}
+    networkBits={defaultNetworkBits}
+    {subnetBits}
+/>
 <span>CIDR notation: /{defaultNetworkBits}</span>
 <span class="font-bold">Custom:</span>
 <span>Subnet mask: {newSubnetMask}</span>
+<Binary
+    value={binaryNewSubnetMask}
+    networkBits={defaultNetworkBits}
+    {subnetBits}
+/>
 <span>Wildcard mask: {newWildcardMask}</span>
-<span>CIDR notation: /{networkBits}</span>
+<Binary
+    value={binaryNewWildcardMask}
+    networkBits={defaultNetworkBits}
+    {subnetBits}
+/>
+<span>CIDR notation: /{networkBits} ({defaultNetworkBits} + {subnetBits})</span>
 <div class="flex flex-col items-center gap-x-1 md:flex-row">
-    <span>Number of hosts for each subnet: {validHosts}</span>
+    <span
+        >Number of hosts for each subnet: {validHosts} (2^{hostBits}{
+            !isSpecial ? '-2' : ''
+        })</span
+    >
     {
         isSpecial && (
             <span class="font-bold">

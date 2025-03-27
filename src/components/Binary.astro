@@ -1,0 +1,25 @@
+---
+import { twMerge } from 'tailwind-merge';
+interface Props {
+    value: string;
+    networkBits: number;
+    subnetBits: number;
+}
+const { value, networkBits, subnetBits } = Astro.props;
+---
+
+<span>Binary rappresentation:</span>
+<div class="flex gap-x-0.5">
+    {
+        Array.from(value).map((v, i) => (
+            <span
+                class={twMerge(
+                    i >= networkBits &&
+                        `font-bold ${i - networkBits < subnetBits ? 'text-red-600' : 'text-blue-600'}`,
+                )}
+            >
+                {v}
+            </span>
+        ))
+    }
+</div>
