@@ -3,7 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import Result from '../components/Result.astro';
 const bytes = Astro.url.searchParams.getAll('byte');
 const subnets = Astro.url.searchParams.get('subnets');
-const show = bytes && subnets ? true : false;
+const show = bytes && subnets;
 ---
 
 <Layout>

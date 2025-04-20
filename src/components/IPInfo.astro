@@ -56,7 +56,7 @@ if (isPOST) {
     page = parseInt(data);
 }
 if (needsPages && page > maxPage) {
-    return Astro.redirect('/');
+    return Astro.redirect(`/${Astro.url.search}`);
 }
 const offset = page * items - items;
 const itemsRemains = maxSubnets - items * (page - 1);
