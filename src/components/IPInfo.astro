@@ -6,6 +6,7 @@ import { binary, decimal } from '../utils/conversion';
 import wildcardMask from '../utils/wildcard';
 import LoadingIndicator from './LoadingIndicator.astro';
 import Binary from './Binary.astro';
+import { twMerge } from 'tailwind-merge';
 interface Props {
     ip: string;
     subnets: number;
@@ -45,8 +46,8 @@ const newWildcardMask = wildcardMask(newSubnetMask);
 const binaryDefaultWildcardMask = binary(defaultWildcardMark);
 const binaryNewWildcardMask = binary(newWildcardMask);
 const items = 250;
-const needsPages = subnets > items;
-const maxPage = Math.ceil(subnets / items);
+const needsPages = maxSubnets > items;
+const maxPage = Math.ceil(maxSubnets / items);
 const isPOST = Astro.request.method == 'POST';
 let page = 1;
 if (isPOST) {
@@ -58,8 +59,8 @@ if (needsPages && page > maxPage) {
     return Astro.redirect('/');
 }
 const offset = page * items - items;
-const itemsRemains = subnets - items * (page - 1);
-let length = needsPages ? items : subnets;
+const itemsRemains = maxSubnets - items * (page - 1);
+let length = needsPages ? items : maxSubnets;
 if (itemsRemains < items) {
     length = itemsRemains;
 }
@@ -134,7 +135,7 @@ if (itemsRemains < items) {
         </ThisIP>
         <FindIP
             startIP={binaryIP}
-            subnets={needsPages ? items : subnets}
+            {subnets}
             hosts={validHosts}
             networkBits={defaultNetworkBits}
             {subnetBits}
@@ -195,7 +196,12 @@ if (itemsRemains < items) {
                         : usable(broadcastIP, -1);
                     const equal = networkIP == broadcastIP;
                     return (
-                        <tr>
+                        <tr
+                            class={twMerge(
+                                subnet > subnets &&
+                                    'cursor-not-allowed bg-gray-600/20 opacity-60',
+                            )}
+                        >
                             <td>Subnet {subnet}</td>
                             <td>{networkIP}</td>
                             {equal && <td>{networkIP}</td>}

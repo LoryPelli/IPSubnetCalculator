@@ -3,10 +3,11 @@
     import { findSubnet, findHost } from '../utils/find';
     interface Props {
         ip: string;
+        subnets: number;
         networkBits: number;
         subnetBits: number;
     }
-    const { ip, networkBits, subnetBits }: Props = $props();
+    const { ip, subnets, networkBits, subnetBits }: Props = $props();
     let found = $state(false);
 </script>
 
