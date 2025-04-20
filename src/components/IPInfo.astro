@@ -135,7 +135,7 @@ if (itemsRemains < items) {
         </ThisIP>
         <FindIP
             startIP={binaryIP}
-            {subnets}
+            subnets={maxSubnets}
             hosts={validHosts}
             networkBits={defaultNetworkBits}
             {subnetBits}
@@ -198,7 +198,7 @@ if (itemsRemains < items) {
                     return (
                         <tr
                             class={twMerge(
-                                subnet > subnets &&
+                                subnet >= subnets &&
                                     'cursor-not-allowed bg-gray-600/20 opacity-60',
                             )}
                         >
@@ -219,7 +219,7 @@ if (itemsRemains < items) {
     </table>
     {
         needsPages && (
-            <form method="post" class="flex items-center gap-x-2 py-2">
+            <form method="POST" class="flex items-center gap-x-2 py-2">
                 <span>Go to page number:</span>
                 <input
                     type="number"
