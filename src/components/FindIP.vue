@@ -89,8 +89,8 @@ const ip = computed(() =>
     >
         Find
     </button>
-    <div v-if="found && ip" class="contents">
+    <template v-if="found && ip">
         <span>The IP of subnet {{ subnet }} and host {{ host }} is:</span>
         <span class="font-bold">{{ ip }}</span>
-    </div>
+    </template>
 </template>
