@@ -27,21 +27,21 @@ const ip = computed(() =>
         <span>Subnet:</span>
         <div>
             <button
-                class="cursor-pointer rounded-md border-2 w-20"
+                class="w-20 cursor-pointer rounded-md border-2"
                 @click="showSubnet = !showSubnet"
             >
                 {{ subnet }}
             </button>
             <UseVirtualList
                 v-if="showSubnet"
-                class="w-20 text-center max-h-80 py-0.5 *:flex *:flex-col *:gap-y-0.5"
+                class="max-h-80 w-20 py-0.5 text-center *:flex *:flex-col *:gap-y-0.5"
                 :list="Array.from({ length: subnets })"
                 :options="{ itemHeight: 30 }"
                 height="auto"
             >
                 <template #default="props">
                     <div
-                        class="w-16 border-2 rounded-md cursor-pointer"
+                        class="w-16 cursor-pointer rounded-md border-2"
                         @click="
                             found = false;
                             showSubnet = false;
@@ -56,21 +56,21 @@ const ip = computed(() =>
         <span>Host:</span>
         <div>
             <button
-                class="cursor-pointer rounded-md border-2 w-20"
+                class="w-20 cursor-pointer rounded-md border-2"
                 @click="showHost = !showHost"
             >
                 {{ host }}
             </button>
             <UseVirtualList
                 v-if="showHost"
-                class="w-20 text-center max-h-80 py-0.5 *:flex *:flex-col *:gap-y-0.5"
+                class="max-h-80 w-20 py-0.5 text-center *:flex *:flex-col *:gap-y-0.5"
                 :list="Array.from({ length: hosts })"
                 :options="{ itemHeight: 30 }"
                 height="auto"
             >
                 <template #default="props">
                     <div
-                        class="w-16 border-2 rounded-md cursor-pointer"
+                        class="w-16 cursor-pointer rounded-md border-2"
                         @click="
                             found = false;
                             showHost = false;
