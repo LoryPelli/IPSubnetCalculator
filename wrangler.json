@@ -9,6 +9,7 @@
         "custom_domain": true
     },
     "assets": {
+        "binding": "ASSETS",
         "directory": "./dist"
     }
 }
