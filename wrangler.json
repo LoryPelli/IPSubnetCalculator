@@ -3,7 +3,7 @@
     "name": "ip",
     "compatibility_date": "2025-06-15",
     "compatibility_flags": ["nodejs_compat"],
-    "main": "./dist/_worker.js/index.js",
+    "main": "dist/_worker.js/index.js",
     "route": {
         "pattern": "ip.lorypelli.dev",
         "custom_domain": true
