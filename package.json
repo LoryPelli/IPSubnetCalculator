@@ -15,20 +15,20 @@
         "@astrojs/vue": "^5.1.4",
         "@tailwindcss/vite": "^4.1.18",
         "@vueuse/components": "^14.1.0",
-        "astro": "^5.16.9",
-        "svelte": "^5.46.4",
+        "astro": "^5.16.12",
+        "svelte": "^5.48.0",
         "tailwind-merge": "^3.4.0",
         "tailwindcss": "^4.1.18",
         "typescript": "^5.9.3",
-        "vue": "^3.5.26"
+        "vue": "^3.5.27"
     },
     "devDependencies": {
-        "prettier": "^3.8.0",
+        "prettier": "^3.8.1",
         "prettier-plugin-astro": "^0.14.1",
         "prettier-plugin-organize-imports": "^4.3.0",
         "prettier-plugin-svelte": "^3.4.1",
         "prettier-plugin-tailwindcss": "^0.7.2",
         "vue-tsc": "^3.2.2",
-        "wrangler": "^4.59.2"
+        "wrangler": "^4.59.3"
     }
 }
