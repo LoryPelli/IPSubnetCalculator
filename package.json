@@ -15,8 +15,8 @@
         "@astrojs/vue": "^5.1.4",
         "@tailwindcss/vite": "^4.1.18",
         "@vueuse/components": "^14.1.0",
-        "astro": "^5.16.12",
-        "svelte": "^5.48.0",
+        "astro": "^5.17.0",
+        "svelte": "^5.49.0",
         "tailwind-merge": "^3.4.0",
         "tailwindcss": "^4.1.18",
         "typescript": "^5.9.3",
@@ -28,7 +28,7 @@
         "prettier-plugin-organize-imports": "^4.3.0",
         "prettier-plugin-svelte": "^3.4.1",
         "prettier-plugin-tailwindcss": "^0.7.2",
-        "vue-tsc": "^3.2.2",
-        "wrangler": "^4.59.3"
+        "vue-tsc": "^3.2.4",
+        "wrangler": "^4.61.1"
     }
 }
